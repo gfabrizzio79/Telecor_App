@@ -1,7 +1,0 @@
-{
-  "name": "Telecor PJ Manager",
-  "description": "An application to manage projects and resources, with data stored in Google Sheets and functionality for generating PDF reports.",
-  "requestFramePermissions": [
-    "camera"
-  ]
-}
