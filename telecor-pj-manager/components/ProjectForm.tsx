@@ -8,7 +8,7 @@ import AssignResourceModal from './AssignResourceModal';
 import { UserGroupIcon, TrashIcon, MagicIcon } from './common/Icons';
 import { getCountries, addCountry } from '../utils/countries';
 import AddCountryModal from './common/AddCountryModal';
-import { generateDescription } from './services/geminiService';
+import { generateDescription } from '../../services/geminiService';
 
 const generateClientId = (): string => {
   const date = new Date();
