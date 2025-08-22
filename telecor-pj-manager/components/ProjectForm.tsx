@@ -1,3 +1,6 @@
+// Arriba de todo en ProjectForm.tsx
+import { db } from '../services/firebase'; // O la ruta correcta a tu archivo de config
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import React, { useState, useEffect } from 'react';
 import { Project, Resource } from '../types';
 import { useLanguage } from '../hooks/useLanguage';
@@ -80,10 +83,27 @@ const ProjectForm: React.FC<ProjectFormProps> = ({ projectToEdit, onSave, onCanc
     setIsAddCountryModalOpen(false);
   }
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSave = async (e: React.FormEvent) => { // 1. La convertimos en async
+  e.preventDefault();
+
+  try {
+    // 2. Añadimos la lógica para guardar en Firestore
+    // Usamos la variable "project" que ya tienes en tu componente
+    await addDoc(collection(db, "proyectos"), {
+      ...project, // Esto copia todos los datos del proyecto actual
+      fechaCreacion: serverTimestamp() // Le añade la fecha de creación del servidor
+    });
+
+    alert("¡Proyecto guardado en la base de datos!");
+
+    // 3. Mantenemos esta línea para que la interfaz se actualice como antes
     onSave(project as Project);
-  };
+
+  } catch (err) {
+    console.error("Error al guardar en Firestore: ", err);
+    alert("Hubo un error al guardar el proyecto.");
+  }
+};
   
   const handleResourceConfirm = (newResources: Resource[]) => {
     setProject(prev => ({ ...prev, resources: newResources }));
