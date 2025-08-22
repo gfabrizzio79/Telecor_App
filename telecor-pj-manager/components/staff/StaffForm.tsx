@@ -1,6 +1,3 @@
-// al principio del archivo
-import { db } from '../../services/firebase'; // <-- Verifica esta ruta
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { Staff, Training, AfpOption, PuestoOption, RolPjOption } from '../../types';
 import { useLanguage } from '../../hooks/useLanguage';
@@ -167,32 +164,14 @@ const StaffForm: React.FC<StaffFormProps> = ({ staffToEdit, onSave, onCancel }) 
     }
   };
 
-  const handleSave = async (e: React.FormEvent) => { // La convertimos en async
-  e.preventDefault();
-
-  // Mantenemos tu lógica para crear el nombre completo
-  const finalStaff = {
-      ...staff,
-      nombreCompleto: `${staff.nombres} ${staff.apellidos}`.trim()
-  };
-
-  try {
-    // Añadimos la lógica para guardar en Firestore
-    await addDoc(collection(db, "staff"), { // Usaremos la colección "staff"
-      ...finalStaff,
-      fechaCreacion: serverTimestamp() // Añadimos una fecha de creación
-    });
-
-    alert("¡Miembro del staff guardado en la base de datos!");
-
-    // Mantenemos la llamada a onSave para que la interfaz se actualice
+  const handleSave = (e: React.FormEvent) => {
+    e.preventDefault();
+    const finalStaff = {
+        ...staff,
+        nombreCompleto: `${staff.nombres} ${staff.apellidos}`.trim()
+    }
     onSave(finalStaff);
-
-  } catch (err) {
-    console.error("Error al guardar en Firestore: ", err);
-    alert("Hubo un error al guardar el registro.");
-  }
-};
+  };
   
   const handleTrainingConfirm = (newTrainings: Training[]) => {
     setStaff(prev => ({ ...prev, trainings: newTrainings }));
