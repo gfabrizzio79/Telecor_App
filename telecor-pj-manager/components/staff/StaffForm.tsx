@@ -167,14 +167,32 @@ const StaffForm: React.FC<StaffFormProps> = ({ staffToEdit, onSave, onCancel }) 
     }
   };
 
-  const handleSave = (e: React.FormEvent) => {
-    e.preventDefault();
-    const finalStaff = {
-        ...staff,
-        nombreCompleto: `${staff.nombres} ${staff.apellidos}`.trim()
-    }
-    onSave(finalStaff);
+  const handleSave = async (e: React.FormEvent) => { // La convertimos en async
+  e.preventDefault();
+
+  // Mantenemos tu lógica para crear el nombre completo
+  const finalStaff = {
+      ...staff,
+      nombreCompleto: `${staff.nombres} ${staff.apellidos}`.trim()
   };
+
+  try {
+    // Añadimos la lógica para guardar en Firestore
+    await addDoc(collection(db, "staff"), { // Usaremos la colección "staff"
+      ...finalStaff,
+      fechaCreacion: serverTimestamp() // Añadimos una fecha de creación
+    });
+
+    alert("¡Miembro del staff guardado en la base de datos!");
+
+    // Mantenemos la llamada a onSave para que la interfaz se actualice
+    onSave(finalStaff);
+
+  } catch (err) {
+    console.error("Error al guardar en Firestore: ", err);
+    alert("Hubo un error al guardar el registro.");
+  }
+};
   
   const handleTrainingConfirm = (newTrainings: Training[]) => {
     setStaff(prev => ({ ...prev, trainings: newTrainings }));
