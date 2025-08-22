@@ -1,3 +1,6 @@
+// al principio del archivo
+import { db } from '../../services/firebase'; // <-- Verifica esta ruta
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import React, { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { Staff, Training, AfpOption, PuestoOption, RolPjOption } from '../../types';
 import { useLanguage } from '../../hooks/useLanguage';
